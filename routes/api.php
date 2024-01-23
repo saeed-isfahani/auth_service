@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +16,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('v1')->middleware(['throttle:20,1'])->group(function () {
+    Route::group([
+        'middleware' => 'api',
+        //TODO we need this?
+        // 'prefix' => 'auth'
+    ], function ($router) {
+        Route::post('login', [AuthController::class, 'login']);
+        Route::post('logout', [AuthController::class, 'logout']);
+        Route::get('me', [AuthController::class, 'me']);
+    });
+    Route::get('check-health', function () {
+        return response()->json(['data' => ['message' => 'Service is working properly.'], 'server_time' => Carbon::now()]);
+    });
 });
