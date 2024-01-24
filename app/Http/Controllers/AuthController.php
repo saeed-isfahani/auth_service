@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -25,7 +26,7 @@ class AuthController extends Controller
      */
     public function login()
     {
-        if(auth()->check()){
+        if (auth()->check()) {
             throw new BadRequestException(__('auth.errors.user_was_logged_in_before'));
         }
         $credentials = request(['mobile', 'password']);
@@ -44,11 +45,11 @@ class AuthController extends Controller
      */
     public function me()
     {
-        if (!JWTAuth::parseToken()) {
+        if (!auth()->check()) {
             throw new BadRequestException(__('auth.errors.user_is_not_login'));
         }
-        
-        return response()->json(auth()->user());
+
+        return response()->json(new UserResource(auth()->user()));
     }
 
     /**
