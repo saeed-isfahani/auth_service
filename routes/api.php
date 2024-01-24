@@ -24,7 +24,7 @@ Route::prefix('v1')->middleware(['throttle:20,1'])->group(function () {
     ], function ($router) {
         Route::post('login', [AuthController::class, 'login']);
         Route::post('logout', [AuthController::class, 'logout']);
-        Route::get('me', [AuthController::class, 'me']);
+        Route::get('check-token', [AuthController::class, 'checkToken']);
     });
     Route::get('check-health', function () {
         return response()->json(['data' => ['message' => 'Service is working properly.'], 'server_time' => Carbon::now()]);
