@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\Controllers\AuthControllerInterface;
 use App\Facades\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use Illuminate\Auth\AuthenticationException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
-class AuthController extends Controller
+class AuthController extends Controller implements AuthControllerInterface
 {
     /**
      * Create a new AuthController instance.
@@ -32,7 +34,7 @@ class AuthController extends Controller
         $credentials = request(['mobile', 'password']);
 
         if (!$token = auth()->attempt($credentials)) {
-            return Response::data(['message' => 'auth.errors.credential_is_wrong'])->send(401);
+            throw new AuthenticationException(__('auth.errors.credential_is_wrong'));
         }
 
         return Response::data([

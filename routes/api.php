@@ -23,7 +23,7 @@ Route::prefix('v1')->middleware(['throttle:20,1'])->group(function () {
         // 'prefix' => 'auth'
     ], function ($router) {
         Route::post('login', [AuthController::class, 'login']);
-        Route::post('logout', [AuthController::class, 'logout']);
+        Route::get('logout', [AuthController::class, 'logout']);
         Route::get('check-token', [AuthController::class, 'checkToken']);
     });
     Route::get('check-health', function () {
