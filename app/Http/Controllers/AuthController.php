@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Auth\AuthenticationException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller implements AuthControllerInterface
 {
@@ -28,7 +29,7 @@ class AuthController extends Controller implements AuthControllerInterface
      */
     public function login()
     {
-        if (auth()->check()) {
+        if (JWTAuth::user()) {
             throw new BadRequestException(__('auth.errors.user_was_logged_in_before'));
         }
         $credentials = request(['mobile', 'password']);

@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AuthController;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,12 +18,10 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')->middleware(['throttle:20,1'])->group(function () {
     Route::group([
         'middleware' => 'api',
-        //TODO we need this?
-        // 'prefix' => 'auth'
     ], function ($router) {
-        Route::post('login', [AuthController::class, 'login']);
-        Route::get('logout', [AuthController::class, 'logout']);
-        Route::get('check-token', [AuthController::class, 'checkToken']);
+        Route::post('login', [AuthController::class, 'login'])->name('auth.login');
+        Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
+        Route::get('check-token', [AuthController::class, 'checkToken'])->name('auth.check_token');
     });
     Route::get('check-health', function () {
         return response()->json(['data' => ['message' => 'Service is working properly.'], 'server_time' => Carbon::now()]);
